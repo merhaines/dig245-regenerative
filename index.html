@@ -1,17 +1,610 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- meta tags, links to css, etc. -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Generative Design</title>
-    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Edu+TAS+Beginner&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Agbalumo&family=Luckiest+Guy&family=Oswald:wght@500&family=Patrick+Hand&family=Rubik+Mono+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Agbalumo&family=Luckiest+Guy&family=Oswald:wght@500&family=Rubik+Mono+One&display=swap" rel="stylesheet">  
+    <title>Regenerative</title>  
 </head>
-<body>
+<style>
+         body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+            background-color: rgb(192, 224, 244);
+        }
+        #tryAgainButton button {
+            color: rgb(72, 173, 213);
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 20px;
+            cursor: pointer;
+            border-radius: 8px;
+            background-color: transparent;
+            border: 2px solid rgb(72, 173, 213);
+        }
+
+        #tryAgainButton button:hover {
+            color: white;
+            background-color: rgb(106, 184, 215);
+        }
+        #resultContainer{
+            border-color: black;
+            font-weight: bolder;
+            font-size: 30px;
+            font-family: 'Patrick Hand', cursive;
+        }
+        
+        h1{
+            font-family: 'Rubik Mono One', sans-serif; 
+            background-color: rgb(161, 212, 232);
+            padding: 2%;
+            margin-top: -40px;
+        }
+        h2{
+            font-family: 'Patrick Hand', cursive;
+            background-color: white;
+            color: black;
+            padding-left: 2%;
+            padding-right: 2%;
+
+        }
+    
+        .option-container {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        .option h4{
+            display:flex;
+            align-items: center;
+            margin:0;
+        }
+        .option-container h4{
+            margin:0;
+        }
+
+        h4{
+            padding: 2%;
+            background-color: white;
+            color: black;
+            font-family: 'Patrick Hand', cursive;
+        }
+
+        @media (max-width: 767.98px) {
+        .option-container {
+        flex-direction: column; 
+        align-items: center; 
+        }
+        }   
+
+        .option {
+            position:relative;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 16px;
+            text-align: center;
+            display:flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .image-container {
+            position:relative;
+        }
+
+        #orHeading {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        font-size: 40px;
+        font-weight: bold;
+        text-align: center;
+        opacity: 1;
+        z-index: 1;
+        border: 16px solid white;
+        border-top: 16px solid black;
+        border-radius: 50%;
+    }
+
+
+        .option img {
+            width: 600px;
+            height: 500px;
+            display: block;
+            margin: 0 auto;
+            max-width: 100%;
+            max-height: 100%; 
+            transition: filter 0.3s ease-in-out;
+            filter: brightness(50%);
+
+        }
+
+        .option:hover img {
+            filter: brightness(20%);
+            border: 10px;
+            border-color: black;
+        }
+
+        .label {
+            
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            text-align: center;
+            opacity: 1;
+            padding: 0px;
+            transition: opacity 0.3s ease-in-out;
+            z-index: 1;
+        }
+
+        .option:hover .label {
+            opacity: 1;
+        }
+
+        .bigger-image img {
+            width: 400px;
+            height: 325px;
+        }
+
+        .question-set {
+            display: none;
+        }
+        .loader {
+            border: 16px solid white;
+            border-top: 16px solid black;
+            border-radius: 50%;
+            width: 400px;
+            height: 400px;
+            animation: spin 5s linear;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            margin-top: -200px; 
+            margin-left: -200px; 
+            display: none;
+        }
+        
+        #loadingText {
+            font-size: 35px;
+            margin-bottom: 5%;
+            font-family: 'Patrick Hand', cursive;
+            margin-top: 10px;
+            color: black;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -60%);
+            display: none;
+            animation: fadeIn 1s ease-in-out;
+        }
+    
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        #myProgress {
+            width: 100%;
+            background-color: white;
+        }
+
+        #myBar {
+            width: 1%;
+            height: 30px;
+            background-color: black;
+        }
+
+        @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class = "container-fluid">
+    <header id="header">
+        <h1>Your Future in 10<br></h1>
+        <div id="loadingText">Crafting your Destiny</div>
+    </header>
+    <div class="loader"></div>
+    
+
+
+    <form id="choiceForm">
+        <input type="hidden" id="userChoice1" name="userChoice1" value="">
+        <input type="hidden" id="userChoice2" name="userChoice2" value="">
+        <input type="hidden" id="userChoice3" name="userChoice3" value="">
+
+        <!-- Question Set 1 -->
+        <div class="question-set" id="questionSet1">
+            <h2>Would you rather</h2>
+            <div class="option-container">
+                <div class="option" onclick="selectOption('Option 1', 1)">
+                    <div class="image-container">
+                    <img src="https://images.unsplash.com/photo-1585409677983-0f6c41ca9c3b?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8fA%3D%3D" alt="Option 1">
+                    <div class="label">Vacation in the mountains</div>
+                </div>
+            </div>
+                <h4>OR</h4>
+            <div class="option" onclick="selectOption('Option 2', 2)">
+                    <div class="option-container">
+                    <img src="https://t3.ftcdn.net/jpg/00/64/16/84/360_F_64168411_KE6FpZ0VhLElbPn7f6eztY7WmbvhpMWz.jpg" alt="Option 2">
+                    <div class="label">Vacation at the beach</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+         <!-- Question Set 2 -->
+         <div class="question-set" id="questionSet2">
+            <h2>Would you rather</h2>
+            <div class="option-container">
+                <div class="option" onclick="selectOption('Option 1', 1)">
+                    <div class="image-container">
+                        <img src="https://media-cldnry.s-nbcnews.com/image/upload/newscms/2019_41/3044956/191009-cooking-vegetables-al-1422.jpg" alt="Option 1">
+                        <div class="label">Be a great cook</div>
+                </div>
+            </div>
+            <h4>OR</h4>
+                <div class="option" onclick="selectOption('Option 2', 2)">
+                    <div class="option-container">
+                        <img src="https://i.insider.com/5eb05adee3c3fb10d73d58c8?width=700" alt="Option 2">
+                        <div class="label">Have a personal chef</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question Set 3 -->
+        <div class="question-set" id="questionSet3">
+            <h2>Would you rather</h2>
+            <div class="option-container">
+                <div class="option" onclick="selectOption('Option 1', 1)">
+                    <div class="image-container">
+                        <img src="https://m.media-amazon.com/images/I/719F9cChACL._AC_UY1000_.jpg" alt="Option 1">
+                        <div class="label">Only wear slippers</div>
+                </div>
+            </div>
+            <h4>OR</h4>
+                <div class="option" onclick="selectOption('Option 2', 2)">
+                    <div class="option-container">
+                        <img src="https://archiesfootwear.com/cdn/shop/products/Archies-Arch-Support-Flip-Flops-Thongs-68_1000x.jpg?v=1656987005" alt="Option 2">
+                        <div class="label">Only wear flip-flops</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+          <!-- Question Set 4 -->
+          <div class="question-set" id="questionSet4">
+            <h2>Would you rather</h2>
+            <div class="option-container">
+                <div class="option" onclick="selectOption('Option 1', 1)">
+                    <div class="image-container">
+                        <img src="https://lajoyalink.com/wp-content/uploads/2018/03/Movie.jpg" alt="Option 1">
+                        <div class="label">Watch a movie</div>
+                </div>
+            </div>
+            <h4>OR</h4>
+                <div class="option" onclick="selectOption('Option 2', 2)">
+                    <div class="option-container">
+                        <img src="https://media.gq.com/photos/5df5a3794e7a380009b83bbd/16:9/w_2560%2Cc_limit/BestShows.jpg" alt="Option 2">
+                        <div class="label">Watch a TV show</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+           <!-- Question Set 5 -->
+           <div class="question-set" id="questionSet5">
+            <h2>Would you rather</h2>
+            <div class="option-container">
+                <div class="option" onclick="selectOption('Option 1', 1)">
+                    <div class="image-container">
+                        <img src="https://res.cloudinary.com/stitch-fix/image/upload/v1691718603/landing-pages/page-author-assets/1017/230804_Gateway_Stylist.png" alt="Option 1">
+                        <div class="label">Shop in-store</div>
+                </div>
+            </div>
+            <h4>OR</h4>
+                <div class="option" onclick="selectOption('Option 2', 2)">
+                    <div class="option-container">
+                        <img src="https://www.addictioncenter.com/app/uploads/2020/01/online_shopping_addiction-scaled.jpeg" alt="Option 2">
+                        <div class="label">Shop online</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+          <!-- Question Set 6 -->
+          <div class="question-set" id="questionSet6">
+            <h2>Would you rather</h2>
+            <div class="option-container">
+                <div class="option" onclick="selectOption('Option 1', 1)">
+                    <div class="image-container">
+                        <img src="https://lakefrontpsychology.com/wp-content/uploads/2019/05/mind-reading.jpg" alt="Option 1">
+                        <div class="label">Have the power to read minds</div>
+                </div>
+            </div>
+            <h4>OR</h4>
+                <div class="option" onclick="selectOption('Option 2', 2)">
+                    <div class="option-container">
+                        <img src="https://www.universityofcalifornia.edu/sites/default/files/uc-irvine-invisible-2.jpg" alt="Option 2">
+                        <div class="label">Have the power of invisibility</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+         <!-- Question Set 7 -->
+         <div class="question-set" id="questionSet7">
+            <h2>Would you rather</h2>
+            <div class="option-container">
+                <div class="option" onclick="selectOption('Option 1', 1)">
+                    <div class="image-container">
+                        <img src="https://assets.simpleviewinc.com/simpleview/image/upload/crm/newyorkstate/SeabreezeRide_351DB002-BF68-4065-BF6A668A73790BE3_20c480e1-f7aa-4f39-a96111902057445d.jpg" alt="Option 1">
+                        <div class="label">Spend the day at an amusement park</div>
+                </div>
+            </div>
+            <h4>OR</h4>
+                <div class="option" onclick="selectOption('Option 2', 2)">
+                    <div class="option-container">
+                        <img src="https://blog.assets.thediscoverer.com/2019/04/Zion-National-Park-Fall-Colors-at-Sunset.jpg" alt="Option 2">
+                        <div class="label">Spend the day at a national park</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+          <!-- Question Set 8 -->
+          <div class="question-set" id="questionSet8">
+            <h2>Would you rather</h2>
+            <div class="option-container">
+                <div class="option" onclick="selectOption('Option 1', 1)">
+                    <div class="image-container">
+                        <img src="https://img.freepik.com/premium-photo/asian-businesswoman-using-laptop-computer-working-office-with-calculator-document-desk-doing-planning-analyzing-financial-report-business-plan-investment-finance-analysis-concept_265022-41880.jpg?size=626&ext=jpg&ga=GA1.1.386372595.1697932800&semt=ais" alt="Option 1">
+                        <div class="label">Always have a full phone battery</div>
+                </div>
+            </div>
+            <h4>OR</h4>
+                <div class="option" onclick="selectOption('Option 2', 2)">
+                    <div class="option-container">
+                        <img src="https://www.endurancewarranty.com/wp-content/uploads/2017/11/Pumping-Gas.jpg" alt="Option 2">
+                        <div class="label">Always have a full gas tank</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+         <!-- Question Set 9 -->
+         <div class="question-set" id="questionSet9">
+            <h2>Would you rather</h2>
+            <div class="option-container">
+                <div class="option" onclick="selectOption('Option 1', 1)">
+                    <div class="image-container">
+                        <img src="https://cdn.apartmenttherapy.info/image/upload/f_jpg,q_auto:eco,c_fill,g_auto,w_1500,ar_1:1/k%2FPhoto%2FRecipe%20Ramp%20Up%2F2022-06-Ice-Cream-Cones%2Fwaffle_cone_2_of_2" alt="Option 1">
+                        <div class="label">Only eat ice cream in a cone</div>
+                </div>
+            </div>
+            <h4>OR</h4>
+                <div class="option" onclick="selectOption('Option 2', 2)">
+                    <div class="option-container">
+                        <img src="https://static.vecteezy.com/system/resources/previews/004/911/252/large_2x/ice-cream-flavor-frozen-dessert-pattern-in-white-cup-hand-holding-on-table-free-photo.jpg" alt="Option 2">
+                        <div class="label">Only eat ice cream in a cup</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+         <!-- Question Set 10 -->
+         <div class="question-set" id="questionSet10">
+            <h2>Would you rather</h2>
+            <div class="option-container">
+                <div class="option" onclick="selectOption('Option 1', 1)">
+                    <div class="image-container">
+                        <img src="https://media.istockphoto.com/id/1147544796/photo/close-up-photo-beautiful-she-her-he-him-his-guy-lady-hiding-facial-expression-laugh-laughter.jpg?s=612x612&w=0&k=20&c=dppgvrMOGpy6A-_XFB70IHO6dQwulx2gIg6CVn3IC7Y=" alt="Option 1">
+                        <div class="label">Be casted for a dating show</div>
+                </div>
+            </div>
+            <h4>OR</h4>
+                <div class="option" onclick="selectOption('Option 2', 2)">
+                    <div class="option-container">
+                        <img src="https://www.tvguide.com/a/img/resize/002af8ed49dfdfc13ec81a84980025f7d7282248/hub/2023/03/02/d9d7cfe0-f428-4e31-b6df-2a686bbb22a7/outlast2.jpg?auto=webp&width=1092" alt="Option 2">
+                        <div class="label">Be casted for a survival show</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div id="myProgress">
+        <div id="myBar"></div>
+      </div>
+
+    <div id="resultContainer"></div>
+
+    <div id="tryAgainButton" style="display: none; margin-top:20px;">
+            <button type="button" class= "btn-primary" onclick="tryAgain()">Try Again</button>
+    </div>
+
 
     <!-- visible content goes here -->
+    <script>
+         var currentQuestionSet = 1;
+         var option1Count = 0;
+         var progressWidth = 0;
 
-    <!-- load javascript after the page elements render -->
-    <script src="assets/js/main.js"></script>
+function selectOption(choice, questionNumber) {
+    if(choice == 'Option 1'){
+        option1Count++;
+    }
+    document.getElementById("userChoice" + questionNumber).value = choice;
+
+    document.getElementById("questionSet" + currentQuestionSet).style.display = "none";
+    currentQuestionSet++;
+    
+    if (currentQuestionSet === 11){
+        document.getElementById("choiceForm").style.display = "none";
+        document.getElementById("myProgress").style.display = "none";
+        generatePrediction(true);
+        return;
+    }
+
+    var nextQuestionSet = document.getElementById("questionSet" + currentQuestionSet);
+    if (nextQuestionSet) {
+        nextQuestionSet.style.display = "block";
+    } else {
+        document.getElementById("choiceForm").lastElementChild.style.display = "block";
+    
+        generatePrediction(true);
+    }
+
+    progressWidth += 10;
+    document.getElementById("myBar").style.width = progressWidth + "%";
+}
+
+function generatePrediction(showLoaderFlag) {
+    if (showLoaderFlag){
+        showLoader();
+        setTimeout(function () {
+                hideLoader();
+            }, 5000);
+        }
+    function getRandomElement(array) {
+            return array[Math.floor(Math.random() * array.length)];
+        }
+
+        setTimeout(function() {
+
+        var vehicles1 = ['<b>electric scooter</b>', '<b>van</b>','<b>pickup truck</b>', '<b>tractor</b>','<b>motorcycle</b>', '<b>bus</b>', '<b>limousine</b>', '<b>Mario Kart</b>','<b>Tesla</b>'];
+        var vehicles2 = ['<b>skateboard</b>', '<b>convertible</b>','<b>segway</b>', '<b>jet ski</b>','<b>golf cart</b>', '<b>RV</b>', '<b>ambulance</b>', '<b>firetruck</b>','<b>taxi</b>'];
+        var dwellings1 = ['<b>treehouse</b>', '<b>cabin</b>','<b>yacht</b>','<b>igloo</b>','<b>beach house</b>', '<b>dorm room</b>','<b>apartment</b>'];
+        var dwellings2 = ['<b>ranch house</b>', '<b>townhouse</b>','<b>condo</b>','<b>tiny house</b>','<b>castle</b>', '<b>mansion</b>','<b>hobbit hole</b>'];
+        var kidNumbers1 = ['<b>3</b>', '<b>0</b>', '<b>19</b>','<b>2</b>','<b>25</b>','<b>4</b>','<b>8</b>','<b>5</b>','<b>6</b>'];
+        var kidNumbers2 = ['<b>5</b>', '<b>9</b>', '<b>20</b>','<b>18</b>','<b>31</b>','<b>14</b>','<b>2</b>','<b>3</b>','<b>0</b>'];
+        var pets1 = ['<b>dog</b>', '<b>pig</b>', '<b>lizard</b>','<b>hedgehog</b>','<b>raccoon</b>','<b>tarantula</b>','<b>parrot</b>','<b>chinchilla</b>','<b>goldfish</b>'];
+        var pets2 = ['<b>turtle</b>', '<b>cat</b>', '<b>horse</b>','<b>hermit crab</b>','<b>chicken</b>','<b>snail</b>','<b>guinea pig</b>','<b>bunny</b>','<b>frog</b>'];
+        var jobs1 = ['<b>3rd grade teacher</b>', '<b>NBA star</b>', '<b>astronaut</b>','<b>chef</b>','<b>babysitter</b>','<b>lifeguard</b>','<b>therapist</b>','<b>clown</b>','<b>comedian</b>'];
+        var jobs2 = ['<b>voice actor</b>', '<b>food critic</b>', '<b>robotics engineer</b>','<b>astrophysicist</b>','<b>wildlife photographer</b>','<b>circus performer</b>','<b>high school football coach</b>','<b>TikToker</b>','<b>construction worker</b>'];
+        var nicknames1 = ['<b>buddy</b>', '<b>pal</b>','<b>champ</b>','<b>dude</b>','<b>kiddo</b>','<b>cupcake</b>','<b>jellybean</b>'];
+        var nicknames2 = ['<b>snickerdoodle</b>', '<b>smiley</b>','<b>bumblebee</b>','<b>peanut</b>','<b>frankenstein</b>','<b>captain</b>','<b>sunshine</b>'];
+        var activities1 = ['<b>skydiving</b>', '<b>knitting</b>','<b>pumpkin carving</b>','<b>cloud watching</b>','<b>extreme unicycling</b>','<b>mowing the lawn</b>','<b>thumb wrestling</b>','<b>hula hooping</b>'];
+        var activities2 = ['<b>bungee jumping</b>', '<b>salsa dancing</b>','<b>rock climbing</b>','<b>archery</b>','<b>stargazing</b>','<b>cooking classes</b>','<b>surfing</b>','<b>fishing</b>'];
+        var talents1 = ['<b>juggling</b>', '<b>reciting the alphabet backwards</b>','<b>playing the harp</b>','<b>impersonating Kim Kardashian</b>','<b>parallel parking</b>'];
+        var talents2 = ['<b>breaking out of escape rooms</b>', '<b>sword swallowing</b>','<b>lifting weights</b>','<b>beatboxing</b>','<b>speed reading</b>'];
+        var fears1 = ['<b>pigeons</b>', '<b>rejection</b>','<b>long words</b>','<b>clowns</b>','<b>darkness</b>','<b>left-handed people</b>','<b>thunder</b>'];
+        var fears2 = ['<b>needles</b>', '<b>failure</b>','<b>ghosts</b>','<b>flying</b>','<b>small spaces</b>','<b>public speaking</b>','<b>dolls</b>'];
+        var relationshipStatuses1 = ['<b>single</b>', '<b>married</b>', '<b>complicated</b>','<b>engaged</b>','<b>divorced</b>','<b>in a long-distance relationship</b>','<b>taking a break</b>'];
+        var relationshipStatuses2 = ['<b>recently single</b>', '<b>in an open relationship</b>', '<b>casually dating</b>','<b>secretly in love</b>','<b>still searching for "the one"</b>','<b>happily single</b>','<b>planning for a future with someone special</b>'];
+
+        if (option1Count >= 5){
+            var vehicle = getRandomElement(vehicles1);
+            var dwelling = getRandomElement(dwellings1);
+            var kids = getRandomElement(kidNumbers1);
+            var pet = getRandomElement(pets1);
+            var job = getRandomElement(jobs1);
+            var nickname = getRandomElement(nicknames1);
+            var weekendActivity = getRandomElement(activities1);
+            var hiddenTalent = getRandomElement(talents1);
+            var biggestFear = getRandomElement(fears1);
+            var relationshipStatus = getRandomElement(relationshipStatuses1);
+        }
+        else{
+            var vehicle = getRandomElement(vehicles2);
+            var dwelling = getRandomElement(dwellings2);
+            var kids = getRandomElement(kidNumbers2);
+            var pet = getRandomElement(pets2);
+            var job = getRandomElement(jobs2);
+            var nickname = getRandomElement(nicknames2);
+            var weekendActivity = getRandomElement(activities2);
+            var hiddenTalent = getRandomElement(talents2);
+            var biggestFear = getRandomElement(fears2);
+            var relationshipStatus = getRandomElement(relationshipStatuses2);
+        }
+
+        var resultContainer = document.createElement('div');
+        resultContainer.innerHTML = '<br>' +
+            '<p>You will drive a ' + vehicle + '.</p>' +
+            '<p>You will live in a ' + dwelling + '.</p>' +
+            '<p>You will have ' + kids + ' kids.</p>' +
+            '<p>You will have a pet ' + pet + '.</p>' +
+            '<p>You will work as a ' + job + '.</p>' +
+            '<p>Your nickname will be ' + nickname + '.</p>' +
+            '<p>Your preferred weekend activity will be ' + weekendActivity + '.</p>' +
+            '<p>You will discover a hidden talent for ' + hiddenTalent + '.</p>' +
+            '<p>Your biggest fear will be ' + biggestFear + '.</p>' +
+            '<p>Your relationship status will be ' + relationshipStatus + '.</p>';
+        
+            
+        var previousResult = document.getElementById("resultContainer");
+            if (previousResult) {
+                document.body.removeChild(previousResult);
+            }
+
+            resultContainer.id = "resultContainer";
+            document.body.appendChild(resultContainer);
+
+            document.getElementById("tryAgainButton").style.display = "block";
+        }, 5000);
+    }
+
+        function showLoader() {
+            var loader = document.querySelector('.loader');
+            var loadingText = document.getElementById('loadingText');
+            loader.style.display = 'block';
+            loadingText.style.display = 'block';
+        }
+
+        function hideLoader() {
+            var loader = document.querySelector('.loader');
+            var loadingText = document.getElementById('loadingText');
+            loader.style.display = 'none';
+            loadingText.style.display = 'none';
+        }
+
+        function tryAgain() {
+            document.getElementById("choiceForm").reset();
+            document.getElementById("resultContainer").style.display = "none";
+
+            currentQuestionSet = 1;
+            option1Count = 0;
+            progressWidth = 0;
+            document.getElementById("questionSet1").style.display = "block";
+            var progressBar = document.getElementById("myBar");
+            var progressContainer = document.getElementById("myProgress");
+            progressContainer.style.display = "block";
+            progressBar.style.width = "0%"; 
+
+            // Hide the "Try Again" button
+            document.getElementById("tryAgainButton").style.display = "none";
+            document.getElementById("choiceForm").style.display = "block";
+        }
+    document.getElementById("questionSet1").style.display = "block";
+    </script>
 </body>
 </html>
