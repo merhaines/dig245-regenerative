@@ -61,10 +61,14 @@
         }
         h2{
             font-family: 'Patrick Hand', cursive;
-            background-color: white;
             color: black;
             padding-left: 2%;
             padding-right: 2%;
+            font-size: 40px;
+            margin-top: 2%;
+            margin-bottom: 2%;
+            background-color: white;
+            font-weight: bold;
 
         }
     
@@ -86,9 +90,11 @@
 
         h4{
             padding: 2%;
-            background-color: white;
             color: black;
             font-family: 'Patrick Hand', cursive;
+            font-size: 40px;
+            font-weight: bold;
+
         }
 
         @media (max-width: 767.98px) {
@@ -109,8 +115,11 @@
             flex-direction: column;
             align-items: center;
         }
-        .image-container {
-            position:relative;
+        @media (min-width: 1200px) {
+            .image-container {
+            width: 100%; /* Adjust the width for XL screens */
+        /* You can also add other styles for XL screens here */
+            }
         }
 
         #orHeading {
@@ -226,6 +235,7 @@
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
         }
+        
     </style>
 </head>
 <body class = "container-fluid">
